@@ -26,6 +26,8 @@ public interface JuegoRepository extends JpaRepository<Juego, Long> {
 
     List<Juego> findByActivoTrue();
 
+    List<Juego> findByUsuarioId(Long usuarioId);
+
     @Query("SELECT j FROM Juego j WHERE LOWER(j.descripcion) LIKE LOWER(CONCAT('%', :palabra, '%'))")
     List<Juego> findJuegoBy(@Param("palabra") String palabra);
 

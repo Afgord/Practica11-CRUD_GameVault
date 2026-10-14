@@ -1,0 +1,113 @@
+<th:block th:replace="~{layout/base :: layout(~{::title},~{::main})}">
+
+    <title>Mi Bóveda - GameVault</title>
+
+    <main class="container">
+
+        <header style="display: flex; justify-content: space-between;
+                       align-items: center; flex-wrap: wrap; gap: 15px;">
+
+            <div>
+                <h1 class="text-gradient">Mi Bóveda</h1>
+
+                <p style="color: var(--text-muted);">
+                    Bienvenido,
+                    <span th:text="${usuario.nombre}">Usuario</span>.
+                    Aquí puedes gestionar tus videojuegos.
+                </p>
+            </div>
+
+            <a th:href="@{/juegos/nuevo}" class="btn btn-primary">
+                + Nuevo Juego
+            </a>
+
+        </header>
+
+        <!-- Mensaje cuando la bóveda está vacía -->
+        <section th:if="${#lists.isEmpty(juegos)}"
+                 class="panel"
+                 style="margin-top: 30px; text-align: center;">
+
+            <h2>Aún no tienes videojuegos</h2>
+
+            <p style="color: var(--text-muted);">
+                Agrega tu primer videojuego para comenzar tu bóveda.
+            </p>
+
+        </section>
+
+        <!-- Videojuegos del usuario -->
+        <section th:unless="${#lists.isEmpty(juegos)}"
+                 class="grid-boveda">
+
+            <article th:each="juego : ${juegos}"
+                     class="panel"
+                     style="display: flex; flex-direction: column;">
+
+                <img th:if="${juego.portadaUrl != null}"
+                     th:src="${#strings.startsWith(juego.portadaUrl, 'http')} ?
+             ${juego.portadaUrl} :
+             @{/uploads/{img}(img=${juego.portadaUrl})}"
+                     alt="Portada del videojuego"
+                     class="portada-boveda">
+
+                <h2 th:text="${juego.titulo}">Título</h2>
+
+                <div class="datos-juego">
+                    <span class="genero-juego"
+                          th:text="${juego.genero}">Género</span>
+
+                    <span th:text="${juego.plataforma}">Plataforma</span>
+                </div>
+
+                <p class="precio-juego">
+                    $
+                    <span th:text="${juego.precio}">0.00</span>
+                </p>
+
+                <p th:text="${juego.descripcion}"
+                   style="color: var(--text-muted); margin-bottom: 20px;">
+                    Descripción
+                </p>
+
+                <div class="acciones-boveda">
+
+                    <a th:href="@{/juegos/editar/{id}(id=${juego.id})}"
+                       class="btn btn-primary">
+                        Editar
+                    </a>
+
+                    <form th:action="@{/juegos/eliminar/{id}(id=${juego.id})}"
+                          method="post"
+                          onsubmit="return confirm('¿Eliminar este videojuego?');">
+
+                        <button type="submit" class="btn btn-danger">
+                            Eliminar
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </article>
+
+        </section>
+
+        <!-- Cerrar sesión -->
+        <form th:action="@{/logout}"
+              method="post"
+              style="margin-top: 30px;">
+
+            <button type="submit"
+                    class="btn"
+                    style="background-color: var(--bg-panel);
+                           color: var(--text-light);
+                           border: 1px solid var(--text-muted);">
+                Cerrar sesión
+            </button>
+
+        </form>
+
+    </main>
+
+</th:block>

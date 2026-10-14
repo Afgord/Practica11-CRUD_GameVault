@@ -34,3 +34,24 @@ build/
 
 # Archivos subidos durante la ejecución
 src/main/resources/static/uploads/*
+
+# =========================================
+# Variables de entorno y credenciales
+# =========================================
+
+.env
+.env.*
+!.env.example
+
+# Configuraciones locales o privadas
+application-local.properties
+application-secret.properties
+application-secrets.properties
+
+# =========================================
+# Archivos temporales
+# =========================================
+
+*.log
+*.tmp
+*.bak

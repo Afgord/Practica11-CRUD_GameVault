@@ -69,6 +69,11 @@ nav {
     box-shadow: 0 0 15px var(--primary-glow);
 }
 
+/* Navegación móvil oculta en escritorio */
+.nav-mobile {
+    display: none;
+}
+
 
 .container {
     max-width: 1200px;
@@ -275,10 +280,22 @@ tr:hover td {
     -webkit-text-fill-color: transparent;
 }
 
-
 @media (max-width: 768px) {
+
+    nav {
+        padding: 1rem;
+    }
+
+    .nav-brand {
+        font-size: 1.25rem;
+    }
+
     .nav-links {
         display: none;
+    }
+
+    .nav-mobile {
+        display: block;
     }
 
     .grid {
@@ -324,4 +341,121 @@ tr:hover td {
     background: #1b2742;
     color: #ffffff;
 }
+
+
+/* =========================================
+   MI BÓVEDA - TARJETAS DE VIDEOJUEGOS
+   ========================================= */
+
+.grid-boveda {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.grid-boveda .panel {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.portada-boveda {
+    display: block;
+    width: 100%;
+    height: 240px;
+    object-fit: contain;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.acciones-boveda {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 15px;
+}
+
+.acciones-boveda > a,
+.acciones-boveda > form {
+    flex: 1;
+    min-width: 0;
+}
+
+.acciones-boveda .btn {
+    width: 100%;
+    text-align: center;
+}
+
+.btn-danger {
+    background-color: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #dc2626;
+}
+
+@media (max-width: 480px) {
+    .grid-boveda {
+        grid-template-columns: 1fr;
+    }
+
+    .acciones-boveda {
+        flex-direction: column;
+    }
+}
+
+
+/* =========================================
+   NAVEGACIÓN MÓVIL
+   ========================================= */
+
+.nav-mobile summary {
+    list-style: none;
+    cursor: pointer;
+    color: var(--text-light);
+    font-weight: 600;
+    padding: 10px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+}
+
+.nav-mobile summary::-webkit-details-marker {
+    display: none;
+}
+
+.nav-mobile summary:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+}
+
+.nav-mobile-links {
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 1rem;
+    width: min(250px, calc(100vw - 2rem));
+    background-color: var(--bg-panel);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    z-index: 200;
+}
+
+.nav-mobile-links a {
+    display: block;
+    color: var(--text-light);
+    padding: 12px;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.nav-mobile-links a:hover,
+.nav-mobile-links a:focus-visible {
+    background-color: rgba(59, 130, 246, 0.15);
+}
+
+
 

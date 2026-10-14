@@ -1,25 +1,47 @@
 <th:block th:replace="~{layout/base :: layout(~{::title},~{::main})}">
-    <title>Subir juego - Game Vault</title>
+    <title th:text="${juego.id == null}
+        ? 'Subir Juego - GameVault'
+        : 'Editar Juego - GameVault'">
+        GameVault
+    </title>
     <main class="container">
         <div class="panel" style="max-width: 600px; margin: 0 auto;">
 
-            <h2 class="text-gradient" style="margin-top: 0;">Añadir Nuevo Juego</h2>
-            <p style="color: var(--text-muted); margin-bottom: 30px;">
-                Sube la información y la portada de un nuevo juego a la bóveda.
+            <h2 class="text-gradient"
+                style="margin-top: 0;"
+                th:text="${juego.id == null}
+        ? 'Añadir Nuevo Juego'
+        : 'Editar Videojuego'">
+                Añadir Nuevo Juego
+            </h2>
+
+            <p style="color: var(--text-muted); margin-bottom: 30px;"
+               th:text="${juego.id == null}
+       ? 'Sube la información y la portada de un nuevo juego a la bóveda.'
+       : 'Modifica la información del videojuego seleccionado.'">
             </p>
 
-            <form th:action="@{/juegos}" method="post" enctype="multipart/form-data">
+            <form th:action="${juego.id == null}
+        ? @{/juegos}
+        : @{/juegos/editar/{id}(id=${juego.id})}"
+                  th:object="${juego}"
+                  method="post"
+                  enctype="multipart/form-data">
 
                 <div class="form-group">
                     <label for="titulo" class="form-label">Título del Juego</label>
-                    <input type="text" id="titulo" name="titulo" required class="form-control">
+                    <input type="text"
+                           id="titulo"
+                           th:field="*{titulo}"
+                           required
+                           class="form-control">
                 </div>
 
                 <div class="form-group">
                     <label for="genero">Género</label>
                     <input type="text"
                            id="genero"
-                           name="genero"
+                           th:field="*{genero}"
                            class="form-control"
                            placeholder="Ej. Acción, RPG, Terror..."
                            required>
@@ -29,7 +51,7 @@
                     <label for="plataforma">Plataforma</label>
                     <input type="text"
                            id="plataforma"
-                           name="plataforma"
+                           th:field="*{plataforma}"
                            class="form-control"
                            placeholder="Ej. PS4, PS5, PC, XBOX One..."
                            required>
@@ -37,17 +59,18 @@
 
                 <div class="form-group">
                     <label for="precio">Precio</label>
-                    <input type="text"
+                    <input type="number"
                            id="precio"
-                           name="precio"
-                           class="form-control"
-                           placeholder="$200.00"
-                           required>
+                           th:field="*{precio}"
+                           min="0"
+                           step="0.01"
+                           required
+                           class="form-control">
                 </div>
 
                 <div class="form-group">
                     <label for="descripcion" class="form-label">Descripción Breve</label>
-                    <textarea id="descripcion" name="descripcion" rows="4" required class="form-control"
+                    <textarea id="descripcion" th:field="*{descripcion}" rows="4" required class="form-control"
                               style="resize: vertical;"></textarea>
                 </div>
 
@@ -56,11 +79,27 @@
 
                     <input type="number"
                            id="anio"
-                           name="anio"
+                           th:field="*{anio}"
                            class="form-control"
                            placeholder="Ej. 2024"
                            min="1950"
                            step="1">
+                </div>
+
+                <div th:if="${juego.id != null && juego.portadaUrl != null}"
+                     class="form-group">
+
+                    <label class="form-label">Portada actual</label>
+
+                    <img th:src="${#strings.startsWith(juego.portadaUrl, 'http')} ?
+                 ${juego.portadaUrl} :
+                 @{/uploads/{img}(img=${juego.portadaUrl})}"
+                         alt="Portada actual"
+                         style="max-width: 150px; border-radius: 8px;">
+
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">
+                        Si no seleccionas otra imagen, se conservará la portada actual.
+                    </p>
                 </div>
 
                 <div class="form-group"
@@ -69,7 +108,12 @@
                         📸 Subir Portada (Imagen)
                     </label>
 
-                    <input type="file" id="portada" name="portada" accept="image/*" required class="form-control"
+                    <input type="file"
+                           id="portada"
+                           name="portada"
+                           accept="image/*"
+                           th:required="${juego.id == null}"
+                           class="form-control"
                            style="border: none; background: transparent; padding-left: 0;">
 
                     <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px; margin-bottom: 0;">
@@ -77,7 +121,12 @@
                     </p>
                 </div>
 
-                <button type="submit" class="btn btn-primary" style="margin-top: 10px; width: 100%;">
+                <button type="submit"
+                        class="btn btn-primary"
+                        style="margin-top: 10px; width: 100%;"
+                        th:text="${juego.id == null}
+            ? 'Guardar en la Bóveda'
+            : 'Guardar Cambios'">
                     Guardar en la Bóveda
                 </button>
             </form>

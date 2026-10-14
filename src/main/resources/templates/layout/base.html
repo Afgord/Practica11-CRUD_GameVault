@@ -9,14 +9,60 @@
 </head>
 <body>
 
+
+
 <nav>
     <a th:href="@{/juegos}" class="nav-brand">🎮 GameVault</a>
+
+    <!-- Navegación de escritorio -->
     <div class="nav-links">
+
         <a th:href="@{/juegos}">Catálogo</a>
-        <a th:href="@{/juegos/nuevo}">Subir Juego</a>
-        <a th:href="@{/fragments-demo}" style="color: var(--success); margin-left:20px;">[Teoría]</a>
+
+        <th:block th:if="${session.usuarioId != null}">
+            <a th:href="@{/mis-juegos}">Mi Bóveda</a>
+            <a th:href="@{/juegos/nuevo}">Subir Juego</a>
+        </th:block>
+
+        <th:block th:unless="${session.usuarioId != null}">
+            <a th:href="@{/login}">Iniciar sesión</a>
+            <a th:href="@{/registro}">Registrarse</a>
+        </th:block>
+
+        <a th:href="@{/fragments-demo}"
+           style="color: var(--success);">[Teoría]</a>
+
     </div>
+
+    <!-- Navegación móvil -->
+    <details class="nav-mobile">
+
+        <summary aria-label="Abrir menú de navegación">
+            ☰ Menú
+        </summary>
+
+        <div class="nav-mobile-links">
+
+            <a th:href="@{/juegos}">Catálogo</a>
+
+            <th:block th:if="${session.usuarioId != null}">
+                <a th:href="@{/mis-juegos}">Mi Bóveda</a>
+                <a th:href="@{/juegos/nuevo}">Subir Juego</a>
+            </th:block>
+
+            <th:block th:unless="${session.usuarioId != null}">
+                <a th:href="@{/login}">Iniciar sesión</a>
+                <a th:href="@{/registro}">Registrarse</a>
+            </th:block>
+
+            <a th:href="@{/fragments-demo}">[Teoría]</a>
+
+        </div>
+
+    </details>
 </nav>
+
+
 
 <main class="container" th:replace="${content}">
     Contenido por defecto...

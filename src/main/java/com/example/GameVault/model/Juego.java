@@ -41,6 +41,8 @@ public class Juego {
     @Column(name = "portada_url")
     private String portadaUrl;
 
-
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
 }

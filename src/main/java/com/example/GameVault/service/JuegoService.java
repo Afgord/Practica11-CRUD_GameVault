@@ -1,5 +1,6 @@
 package com.example.GameVault.service;
 
+import com.cloudinary.Cloudinary;
 import com.example.GameVault.model.Juego;
 import com.example.GameVault.repository.JuegoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,22 @@ public class JuegoService {
     @Autowired
     private JuegoRepository juegoRepository;
 
+    @Autowired(required = false)
+    private Cloudinary cloudinary;
+
     private static final String UPLOAD_DIR =
             "src/main/resources/static/uploads/";
 
     public List<Juego> listarTodos() {
         return juegoRepository.findAll();
+    }
+
+    public List<Juego> listarPorUsuario(Long usuarioId) {
+        return juegoRepository.findByUsuarioId(usuarioId);
+    }
+
+    public Juego obtenerJuegoPorId(Long id) {
+        return juegoRepository.findById(id).orElse(null);
     }
 
     public List<Juego> listarActivos() {
@@ -72,11 +84,15 @@ public class JuegoService {
         );
     }
 
+    public void eliminarJuego(Long id) {
+        juegoRepository.deleteById(id);
+    }
+
     public void guardarJuego(Juego juego, MultipartFile portada) {
 
-        if (juego.getPrecio() == null || juego.getPrecio() <= 0) {
+        if (juego.getPrecio() == null || juego.getPrecio() < 0) {
             throw new IllegalArgumentException(
-                    "El precio debe ser mayor que cero"
+                    "El precio debe ser mayor o igual que cero (F2P)"
             );
         }
 
@@ -96,13 +112,17 @@ public class JuegoService {
             juego.setActivo(true);
         }
 
-        String nombreArchivo = "default.jpg";
-
         if (portada != null && !portada.isEmpty()) {
-            nombreArchivo = guardarImagenEnProyecto(portada);
-        }
 
-        juego.setPortadaUrl(nombreArchivo);
+            String nombreArchivo = guardarImagenEnProyecto(portada);
+
+            juego.setPortadaUrl(nombreArchivo);
+
+        } else if (juego.getPortadaUrl() == null
+                || juego.getPortadaUrl().isBlank()) {
+
+            juego.setPortadaUrl("default.jpg");
+        }
 
         juegoRepository.save(juego);
     }
